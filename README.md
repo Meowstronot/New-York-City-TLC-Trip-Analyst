@@ -112,7 +112,8 @@ pip install -r requirements.txt
 ### C. Open Notebook
 * Buka file `New York City TLC Trip.ipynb` yang pada folder notebok
 * Eksekusi setiap sel kode untuk menjalankan analisis.
-* Buka file `NYC TLC Dashboard.twbx` pada folder report untuk membuka Dasboard Tableau
+* Buka file `NYC TLC Dashboard.twbx` pada folder report untuk membuka Dasboard Tableau <br>
+atau membuka [Link Tableau Public](https://public.tableau.com/app/profile/khisanul.fakhrudin/viz/NYCTLCDashboard_17436066078670/Page1?publish=yes) dengan browser.
 
 ## 7. Contact 📩
 * **Nama**: Muhammad Khisanul Fakhrudin Akbar
