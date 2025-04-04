@@ -1,5 +1,6 @@
 
-# ignore template tableau
+# ignore bahan tableau & ppt
 /report/template.pptx
 /report/2.jpg
 /report/1.jpg
+/report/bahan_ppt.xlsx
