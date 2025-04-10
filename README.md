@@ -1,16 +1,16 @@
-# Travel Fraud Analyst at the New York City Taxi and Limousine Commission (NYC TLC)
+# Fraud Detection in NYC Taxi Services: A Data Science Approach Using TLC Trip Data (January 2023)
 ---
 ## 1. Project Overview 📌
-NYC Taxi and Limousine Commission (NYC TLC) mengawasi layanan transportasi berlisensi di New York City untuk memastikan keselamatan, keadilan, dan kepatuhan. Salah satu tantangan yang dihadapi adalah potensi kecurangan dalam perjalanan taksi yang dapat merugikan penyedia layanan maupun pelanggan. Proyek ini bertujuan untuk mendeteksi potensi kecurangan dalam data perjalanan taksi NYC TLC dengan mengidentifikasi anomali pada jarak, durasi, dan tarif perjalanan, serta pola pickup dan drop-off. 
+NYC Taxi and Limousine Commission (NYC TLC) mengawasi layanan transportasi berlisensi di New York City untuk memastikan keselamatan, keadilan, dan kepatuhan. Salah satu tantangan yang dihadapi adalah potensi kecurangan dalam perjalanan taksi yang dapat merugikan penyedia layanan maupun pelanggan. Proyek ini bertujuan untuk mendeteksi potensi kecurangan dalam data perjalanan taksi NYC TLC dengan mengidentifikasi abnormalitas pada jarak, durasi, dan tarif perjalanan, serta pola pickup dan drop-off. 
 
-Analisis ini bertujuan mendeteksi anomali pada data perjalanan taksi yang berpotensi mencerminkan aktivitas mencurigakan atau kecurangan, dengan fokus pada:
-1. Deteksi Anomali Perjalanan:
-    * Jarak perjalanan yang tidak masuk akal.
-    * Durasi perjalanan yang terlalu lama untuk jarak pendek atau terlalu cepat untuk jarak jauh.
-    * Tarif perjalanan yang tidak sesuai dengan jarak atau waktu tempuh.
-1. Deteksi Anomali Pola Pickup dan Dropoff:
-    * Identifikasi lokasi yang sering terjadi anomali.
-    * Analisis waktu tertentu yang memiliki pola perjalanan mencurigakan.
+Analisis ini bertujuan mendeteksi abnormalitas pada data perjalanan taksi yang berpotensi mencerminkan aktivitas mencurigakan atau kecurangan, dengan fokus pada:
+1. Mendeteksi perjalanan mencurigakan
+    * Abnormalitas pada jarak perjalanan, apakah ada perjalanan dengan jarak yang tidak masuk akal?
+    * Abnormalitas pada durasi perjalanan, apakah ada perjalanan yang berlangsung terlalu lama untuk jarak pendek atau terlalu cepat untuk jarak jauh?
+    * Abnormalitas pada tarif perjanalan, apakah ada perjalanan yang kategori tarifnya tidak sesuai?
+1. Pola Abnormalitas
+    * Mengetahui daerah mana saja yang sering terjadinya abnormalitas perjalanan
+    * Mengetahui pada waktu-waktu tertentu yang sering terjadinya abnormalitas perjalanan
 
 ## 2. Data Sources 🛢
 * [New York City Taxi and Limousine Commission (NYC TLC) Trip Record](data/NYC%20TLC%20Trip%20Record.csv) -
@@ -50,54 +50,53 @@ Dataset ini memuat berbagai informasi penting seperti waktu dan lokasi penjemput
 
 ### 5.1 Business Insight
 **A. Permintaan Taksi**
-* Manhattan menjadi pusat aktivitas taksi tertinggi dengan 37.474 perjalanan, jauh melampaui borough lainnya. Hal ini wajar karena Manhattan adalah pusat bisnis, pariwisata, dan hiburan di NYC. Aktivitas tinggi ini juga didorong oleh keberadaan destinasi populer seperti Times Square, Wall Street, dan berbagai pusat perkantoran.
-* Queens menempati posisi kedua dengan 17.261 perjalanan, yang kemungkinan besar dipengaruhi oleh kedekatannya dengan dua bandara utama, yakni JFK dan LaGuardia. Ini menandakan Queens sebagai wilayah transit utama bagi pendatang dan pelancong.
-* Brooklyn memiliki 8.014 perjalanan, mencerminkan aktivitas yang cukup stabil, meski tidak setinggi Manhattan atau Queens.
-* Bronx, Staten Island, dan wilayah dengan label "Unknown" memiliki jumlah perjalanan yang jauh lebih sedikit. Aktivitas terbatas ini mencerminkan karakteristik wilayah yang lebih bersifat residensial atau kurang padat.
-* EWR (Newark Airport) mencatat hanya 1 perjalanan, menunjukkan minimnya aktivitas taksi yang berhubungan dengan bandara tersebut, kemungkinan karena penumpang lebih memilih moda transportasi lain seperti kereta atau layanan rideshare.
+* Manhattan menjadi pusat aktivitas taksi tertinggi dengan 37.352 perjalanan, jauh melampaui borough lainnya. Hal ini wajar karena Manhattan adalah pusat bisnis, pariwisata, dan hiburan di NYC. Aktivitas tinggi ini juga didorong oleh keberadaan destinasi populer seperti Times Square, Wall Street, dan berbagai pusat perkantoran.
+* Queens menempati posisi kedua dengan 17.018 perjalanan, yang kemungkinan besar dipengaruhi oleh kedekatannya dengan dua bandara utama, yakni JFK dan LaGuardia. Ini menandakan Queens sebagai wilayah transit utama bagi pendatang dan pelancong.
+* Brooklyn memiliki 7.915 perjalanan, mencerminkan aktivitas yang cukup stabil, meski tidak setinggi Manhattan atau Queens.
+* Bronx dan Staten Island memiliki volume perjalanan yang sangat rendah (885 dan hanya 12 perjalanan), mengindikasikan bahwa kedua borough ini memiliki tingkat penggunaan taksi yang sangat minim selama Januari 2023. Hal ini bisa disebabkan oleh preferensi moda transportasi lain, keterbatasan akses layanan, atau karakteristik wilayah yang berbeda.
 
-**B. Zona dengan Anomali Tinggi**
-* Borough Queens mencatat jumlah perjalanan mencurigakan tertinggi senilai 1317, meskipun total perjalanan lebih rendah dari Manhattan.
-* East Harlem North (Manhattan) mencatat jumlah anomali tertinggi dalam kategori zone dengan 234 kasus (0,37% dari seluruh perjalanan). Sebagai wilayah dengan aktivitas sosial yang beragam, East Harlem North berpotensi memiliki risiko lebih tinggi terkait aktivitas mencurigakan.
-* Astoria (Queens) berada di posisi kedua dengan 187 kasus (0,29%). Astoria merupakan wilayah yang ramai dengan restoran, kafe, dan area komersial, yang mungkin berkontribusi pada lonjakan anomali.
+**B. Lokasi dengan jumlah perjalanan mencurigakan Tinggi**
+* Berdasarkan analisis per borough, Bronx dan Staten Island menunjukkan tingkat perjalanan mencurigakan tertinggi secara proporsional (masing-masing 36.27% dan 33.33%), meskipun jumlah perjalanan mencurigakannya rendah, sehingga perlu perhatian khusus. Brooklyn juga memiliki rasio yang cukup tinggi (9.70%) dibanding borough lain. Sebaliknya, Manhattan memiliki rasio terendah (1.90%) meskipun jumlah perjalanan mencurigakannya terbesar, menandakan potensi efektivitas sistem pengawasan. Sementara itu, Queens mencatat jumlah kasus terbanyak, namun dengan rasio yang relatif rendah (7.16%).
+* Beberapa zona di Queens seperti Long Island City/Hunters Point (63.83%) dan Queensbridge/Ravenswood (56.49%) memiliki proporsi perjalanan mencurigakan yang sangat tinggi. Meski total perjalanan rendah, angka ini menjadi sinyal peringatan kuat akan potensi kecurangan yang terlokalisasi.
 
 **C. Polanya Berdasarkan Waktu**
-* Hari dengan Anomali Tertinggi:
-    * Anomali cenderung lebih banyak terjadi pada Selasa (575 kasus), diikuti oleh Rabu (520 kasus) dan Senin (511 kasus). Hal ini kemungkinan besar disebabkan oleh aktivitas yang lebih tinggi pada hari kerja, terutama di awal minggu.
-    * Aktivitas anomali menurun secara bertahap dari Kamis hingga Minggu, dengan jumlah terendah pada Sabtu (421 kasus).
-    * Pola ini menyoroti bahwa potensi aktivitas mencurigakan lebih berhubungan dengan hari kerja daripada akhir pekan.
+* **Awal Pekan dan Tengah Hari Jadi Periode Paling Rawan**
+    * Perjalanan mencurigakan paling banyak terjadi pada hari kerja, khususnya Selasa, Rabu, dan Senin, dengan jumlah tertinggi tercatat pada rentang waktu 11:00–15:00. Ini menunjukkan bahwa awal minggu dan tengah hari adalah periode dengan risiko kecurangan tertinggi, kemungkinan karena tingginya aktivitas operasional dan volume perjalanan.
 
-* Waktu dengan Anomali Tertinggi:
-    * Anomali mencapai puncaknya pada pukul 14:00 - 15:00 dan tetap tinggi sepanjang pukul 11:00 - 16:00. Periode ini bertepatan dengan jam makan siang dan transisi shift kerja, yang mungkin meningkatkan potensi perilaku mencurigakan di tengah lonjakan aktivitas.
-    * Anomali cenderung menurun secara signifikan setelah pukul 20:00, mencerminkan berkurangnya mobilitas warga pada malam hari.
-    * Dini hari (pukul 00:00 - 06:00) mencatat jumlah anomali terendah, menandakan minimnya aktivitas taksi pada periode ini.
+* **Akhir Pekan Lebih Stabil tapi Bukan Bebas Risiko**
+    * Sabtu dan Minggu mencatat frekuensi perjalanan mencurigakan paling rendah, namun tetap signifikan. Hal ini menandakan bahwa meskipun volume perjalanan lebih rendah, potensi penyimpangan masih ada dan tidak boleh diabaikan.
+
+* **Waktu-waktu Kritis di Pagi dan Sore Hari**
+    * Selain puncak di tengah hari, terdapat lonjakan mencurigakan pada jam sibuk pagi (06:00–09:00), serta stabilisasi kembali pada sore hari (16:00–18:00), mencerminkan dinamika lalu lintas perkotaan dan perubahan intensitas pengawasan.
+
 
 ### 5.2 Actionable Recommendation
-**A. Optimalisasi Penempatan Taksi**
-* **Penyesuaian Armada di Manhattan:** <br>
-Dengan jumlah perjalanan tertinggi, Manhattan memerlukan distribusi armada yang optimal, terutama di kawasan padat seperti Times Square, Wall Street, dan pusat bisnis lainnya. Ini merupakan sebuah peluang untuk dapat mempertimbangkan penempatan kendaraan tambahan selama jam sibuk (11:00 - 16:00).
-* **Optimalisasi Layanan di Queens** <br>
-Karena tingginya jumlah perjalanan terkait bandara di Queens, kerja sama dengan pihak bandara untuk menyediakan jalur taksi khusus atau pos taksi di lokasi strategis dapat meningkatkan layanan.
-* **Strategi Promosi di Brooklyn dan Area Sepi** <br>
-Untuk meningkatkan permintaan di Brooklyn dan area dengan aktivitas lebih rendah, mungkin dapat mengadakan penawaran diskon, layanan antar-jemput berbasis reservasi, atau kerja sama dengan layanan pariwisata.
-* **Peninjauan Layanan ke EWR (Newark Airport)** <br>
-Dengan minimnya aktivitas taksi ke EWR, disarankan untuk mengevaluasi tarif, rute, dan promosi khusus untuk menarik penumpang.
+**A. Optimasi Layanan Berdasarkan Permintaan Taksi**
+* **Penambahan Armada di Manhattan Selama Jam Sibuk:** <br>
+Dengan dominasi perjalanan di Manhattan (37.352 perjalanan), disarankan untuk menambah armada taksi di zona sibuk seperti Times Square dan Wall Street, terutama pada rentang waktu 11:00–15:00, guna memenuhi lonjakan permintaan secara efisien.
+* **Perkuat Infrastruktur Layanan di Queens** <br>
+Queens sebagai hub bandara memerlukan kerja sama strategis dengan JFK dan LaGuardia. Penyediaan jalur prioritas dan pos taksi di titik kedatangan penting akan meningkatkan kenyamanan serta mengurangi waktu tunggu penumpang.
+* **Dorongan Permintaan di Brooklyn & Area Rendah Aktivitas** <br>
+Untuk meningkatkan permintaan di Brooklyn dan area dengan aktivitas lebih rendah, mungkin dapat mengadakan penawaran diskon, layanan untuk meningkatkan utilisasi taksi di Brooklyn dan borough seperti Bronx/Staten Island, perlu program promosi dinamis (misalnya: diskon, rute flat fare, atau layanan antar-jemput terjadwal). Fokuskan pada lokasi wisata lokal dan area pemukiman padat.
 
-**B. Mitigasi Aktivitas Anomali**
-* **Deteksi dan Pencegahan Manipulasi Perjalanan** <br>
-Mengingat potensi pencatatan perjalanan palsu dan manipulasi data GPS , solusinya:
-    - Memperbarui dan maintenance berkala pada perangkat pencatat perjalanan seperti taximeter agar dapat mengurangi kesalahan pencatatan perjalanan dan kesalahan pengiriman data.
+**B. Mitigasi Aktivitas Mencurigakan**
+* **Penguatan Peran sebagai Regulator Data** <br>
+Sebagai regulator, NYC TLC perlu memperkuat perannya dalam memastikan kualitas data dengan membentuk unit pengawasan data internal, menerapkan kebijakan data governance yang ketat, dan membangun sistem deteksi fraud untuk mengidentifikasi perjalanan mencurigakan secara akurat dan memastikan data yang dikumpulkan lebih valid.
+* **Peningkatan Akurasi Data & Deteksi Dini Manipulasi** <br>
+Bronx dan Staten Island meski volumenya rendah, memiliki rasio mencurigakan tinggi. Untuk itu:
+    - Pembaruan sistem taximeter dan perangkat GPS wajib dilakukan secara berkala.
     - Memperbarui Perangkat Lunak GPS untuk meningkatkan akurasi dan mendeteksi lokasi yang tidak realistis atau perjalanan yang tidak sesuai pola wajar.
-* **Penambahan Pengawasan di Zona Rawan** <br>
-Karena East Harlem North (Manhattan) dan Astoria (Queens) mencatat banyak anomali, disarankan untuk:
-    - Memasang CCTV dan Sensor Pemantauan di area dengan lonjakan anomali.
+* **Fokus Pengawasan pada Zona dengan Proporsi Tinggi** <br>
+Zona seperti Long Island City/Hunters Point dan Queensbridge/Ravenswood menunjukkan proporsi kecurigaan ekstrem (>50%). Disarankan:
+    - Memasang CCTV dan Sensor Pemantauan di area dengan lonjakan perjalanan mencurigakan.
     - Membentuk Tim Inspeksi Lapangan untuk mengecek potensi manipulasi data oleh pengemudi.
 
 **C. Edukasi**
 * **Sosialisasi kepada Pengemudi tentang Kebijakan dan Etika** <br>
 Program ini bertujuan untuk meningkatkan kesadaran pengemudi akan konsekuensi hukum manipulasi data serta pentingnya kejujuran dalam pencatatan perjalanan.
-* **Edukasi Penumpang** <br>
-Kampanye informasi untuk penumpang agar mereka memahami cara melaporkan jika menemukan perjalanan yang mencurigakan atau tidak sesuai.
+* **Pemberdayaan Penumpang dalam Pelaporan** <br>
+Kampanyekan sistem pelaporan kecurangan berbasis aplikasi atau hotline agar penumpang merasa diberdayakan dan dilibatkan dalam menjaga integritas layanan.
+
 
 ## 6. How to use 🚀
 ### A. Requiments:
